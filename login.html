@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Vyaktitva</title>
+    <link rel="stylesheet" href="style1.css">
+    <link rel="shortcut icon" href="img/logo.png" type="image/x-icon">
+</head>
+<body>
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <img src="img/logo.png" alt="Vyaktitva Logo" class="hero-logo">
+        <h1>Vyaktitva</h1>
+        <p>Discover your personality traits!</p>
+    </div>
+
+    <!-- Main Container for Login and Image -->
+    <div class="main-container">
+        <!-- Login Container -->
+        <div class="login-container">
+            <h2>Login to Your Account</h2>
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" id = "loginButton" class="login-button">Log In</button>
+            </form>
+            <p>Don't have an account yet? <a href="signup.html">Sign up here</a></p>
+        </div>
+    </div>
+
+    <script>
+        // Check if the user is already logged in
+        const storedUsername = localStorage.getItem('username');
+        if (storedUsername) {
+            alert(`Welcome back, ${storedUsername}!`);
+            window.location.href = 'index.html'; // Redirect to homepage if already logged in
+        }
+
+        // Login form submission handler
+        document.getElementById('loginForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const username = data.name; // Assuming the server returns the username as `name`
+
+                    alert('Login successful');
+                    handleLoginSuccess(username);
+                } else {
+                    const errorText = await response.text();
+                    alert(errorText);
+                }
+            } catch (error) {
+                console.error('Error during login:', error);
+            }
+        });
+
+        // Update the login success handler
+        function handleLoginSuccess(username) {
+            localStorage.setItem('username', username);
+            localStorage.setItem('userToken', 'logged-in');
+            
+            // Check if user came from test selection
+            const redirectAfterLogin = localStorage.getItem('redirectAfterLogin');
+            if (redirectAfterLogin === 'test') {
+                localStorage.removeItem('redirectAfterLogin');
+                window.location.href = 'test.html';
+            } else {
+                window.location.href = 'dashboard.html';
+            }
+        }
+    </script>
+</body>
+</html>

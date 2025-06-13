@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vyaktitva The Personality Test</title>
+    <link rel="stylesheet" href="test.css" />
+  </head>
+  <body>
+    <!-- Test Mode Indicator -->
+    <div class="test-mode-indicator" id="testModeIndicator">
+      <!-- Will be populated by JavaScript -->
+    </div>
+
+    <!-- Terms section -->
+    <div id="test-terms-section">
+      <h1>Vyaktitva: The Personality Test</h1>
+      <div id="terms-and-conditions">
+        <h2>Terms and Conditions</h2>
+        <p>Please read the following terms and conditions before starting the test:</p>
+        <ul>
+          <li>There are total 40 questions and all are mandatory to attempt.</li>
+          <li>There is no negative marking.</li>
+          <li>Each option is correct, so don't focus to find correct option. Because each option has its own unique value.</li>
+          <li>⁠Once you start the test the timer will start counting and at the end of 30 mins test will automatically submit. You can also submit test manually but not before 15 mins.</li>
+          <li>Ensure that you are in a quiet environment with minimal distractions.</li>
+          <li>The test requires you to have your camera and microphone enabled.</li>
+          <li>Do not refresh the page during the test, as it may lead to loss of progress.</li>
+        </ul>
+        
+        <div class="terms-checkbox">
+            <input type="checkbox" id="agree-checkbox" name="agree-checkbox">
+            <label for="agree-checkbox">I agree to the terms and conditions</label>
+        </div>
+        
+        <button id="start-test-button" type="button" disabled>Start Personality Test</button>
+      </div>
+    </div>
+
+    <!-- Test section -->
+    <div id="test-form-section" style="display: none">
+      <h1>Vyaktitva: The Personality Test</h1>
+      <div id="timer">Time Remaining: 30:00</div>
+
+      <form id="personality-form">
+        <div id="question-container">
+          <h2 id="question-number"></h2>
+          <p id="question-text"></p>
+          <div id="questions-form"></div>
+        </div>
+
+        <div id="button-container">
+          <button type="button" id="previous-question-button">Previous Question</button>
+          <button type="button" id="next-question-button">Next Question</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Result section -->
+    <div id="result" style="display:none;">
+       <!-- Results will be inserted here by JavaScript -->
+    </div>
+
+    <script type="module" src="test.js"></script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+          const username = localStorage.getItem('username');
+          const testMode = localStorage.getItem('testMode');
+          const indicator = document.getElementById('testModeIndicator');
+          
+          if (username) {
+              indicator.innerHTML = `
+                  <div class="mode-badge logged-in">
+                      👤 Testing as: <strong>${username}</strong> 
+                      <span class="save-indicator">✅ Results will be saved</span>
+                  </div>
+              `;
+          } else {
+              indicator.innerHTML = `
+                  <div class="mode-badge guest">
+                      🌟 Testing as Guest 
+                      <span class="save-indicator">⚠️ Results will not be saved</span>
+                      <a href="test-selection.html" class="change-mode">Change Mode</a>
+                  </div>
+              `;
+          }
+      });
+    </script>
+
+    <style>
+      .test-mode-indicator {
+          background: var(--glass-bg);
+          backdrop-filter: blur(25px);
+          border-bottom: 2px solid var(--glass-border);
+          padding: 1rem;
+          text-align: center;
+          position: sticky;
+          top: 0;
+          z-index: 999;
+      }
+
+      .mode-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 1rem;
+          padding: 0.75rem 1.5rem;
+          border-radius: 50px;
+          font-weight: 600;
+          color: var(--text-secondary);
+      }
+
+      .mode-badge.logged-in {
+          background: rgba(76, 175, 80, 0.2);
+          border: 2px solid rgba(76, 175, 80, 0.5);
+      }
+
+      .mode-badge.guest {
+          background: rgba(255, 193, 7, 0.2);
+          border: 2px solid rgba(255, 193, 7, 0.5);
+      }
+
+      .save-indicator {
+          font-size: 0.9rem;
+          opacity: 0.9;
+      }
+
+      .change-mode {
+          color: var(--text-secondary);
+          text-decoration: none;
+          font-weight: 600;
+          padding: 0.25rem 0.75rem;
+          border-radius: 20px;
+          background: rgba(255, 255, 255, 0.2);
+          transition: all 0.3s ease;
+      }
+
+      .change-mode:hover {
+          background: rgba(255, 255, 255, 0.3);
+          transform: translateY(-2px);
+      }
+    </style>
+  </body>
+</html>

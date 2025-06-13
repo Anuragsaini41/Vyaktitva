@@ -1,0 +1,6 @@
+@echo off
+echo Installing required npm packages...
+npm install
+echo Starting server...
+node app.js
+pause

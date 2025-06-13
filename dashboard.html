@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Vyaktitva</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="icon" href="img/logo.png" type="image/png">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Delete Button Styles */
+        .test-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .test-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .delete-test-btn {
+            background: rgba(244, 67, 54, 0.8);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(244, 67, 54, 0.3);
+        }
+
+        .delete-test-btn:hover {
+            background: rgba(244, 67, 54, 1);
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(244, 67, 54, 0.5);
+        }
+
+        .delete-action-btn {
+            background: linear-gradient(135deg, #f44336, #ff5722);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 600;
+            box-shadow: 0 3px 10px rgba(244, 67, 54, 0.3);
+        }
+
+        .delete-action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(244, 67, 54, 0.5);
+        }
+
+        /* Delete Confirmation Modal */
+        .delete-confirmation-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .delete-confirmation-modal.modal-active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            border: 2px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            min-width: 400px;
+            max-width: 90vw;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .modal-active .modal-content {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .modal-header h3 {
+            color: var(--text-secondary);
+            margin: 0 0 1rem 0;
+            font-size: 1.3rem;
+            text-align: center;
+        }
+
+        .modal-body {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .modal-body p {
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .warning-text {
+            color: #ff9800 !important;
+            font-weight: 600;
+            font-size: 0.9rem !important;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .cancel-btn {
+            background: rgba(108, 117, 125, 0.8);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .cancel-btn:hover {
+            background: rgba(108, 117, 125, 1);
+            transform: translateY(-2px);
+        }
+
+        .confirm-delete-btn {
+            background: linear-gradient(135deg, #f44336, #ff5722);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(244, 67, 54, 0.4);
+        }
+
+        .confirm-delete-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(244, 67, 54, 0.6);
+        }
+
+        /* Enhanced Test Actions */
+        .test-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .modal-content {
+                min-width: 320px;
+                padding: 1.5rem;
+            }
+
+            .test-header-actions {
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: flex-end;
+            }
+
+            .test-actions {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+
+            .delete-test-btn {
+                width: 30px;
+                height: 30px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .modal-content {
+                min-width: 280px;
+                padding: 1rem;
+            }
+
+            .modal-actions {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .cancel-btn, .confirm-delete-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <!-- Brand Logo -->
+            <a href="index.html" class="navbar-brand">
+                <img src="img/logo.png" alt="Vyaktitva Logo" class="brand-logo">
+                <span class="brand-text">Vyaktitva</span>
+            </a>
+
+            <!-- Navigation Links -->
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#personality-traits">Personality Traits</a></li>
+                <li><a href="index.html#team">Team</a></li>
+                
+            </ul>
+
+            <!-- Account Menu -->
+            <div class="account-menu">
+                <button class="account-btn" onclick="toggleDropdown(event)" id="accountButton">
+                    Dashboard ▼
+                </button>
+                <div class="dropdown-content" id="dropdownMenu">
+                    <a href="test.html">
+                        <i class="test-icon">📝</i> Take Test
+                    </a>
+                    <a href="#" onclick="logout(event)">
+                        <i class="logout-icon">🚪</i> Logout
+                    </a>
+                </div>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-toggle" id="mobileToggle" onclick="toggleMobileMenu()">☰</button>
+        </div>
+    </nav>
+
+    <!-- Dashboard Content -->
+    <main class="dashboard-main">
+        <!-- Welcome Section -->
+        <section class="welcome-section">
+            <div class="welcome-container">
+                <h1 class="welcome-title">Welcome back, <span id="userNameDisplay">User</span>! 👋</h1>
+                <p class="welcome-subtitle">Track your personality test results and insights</p>
+            </div>
+        </section>
+
+        <!-- Dashboard Grid -->
+        <section class="dashboard-grid">
+            <!-- Stats Cards -->
+            <div class="stats-cards">
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-content">
+                        <h3 id="totalTests">0</h3>
+                        <p>Total Tests</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">🎯</div>
+                    <div class="stat-content">
+                        <h3 id="lastScore">--</h3>
+                        <p>Last Score</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">📈</div>
+                    <div class="stat-content">
+                        <h3 id="avgScore">--</h3>
+                        <p>Average Score</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">🏆</div>
+                    <div class="stat-content">
+                        <h3 id="bestScore">--</h3>
+                        <p>Best Score</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Tests -->
+            <div class="recent-tests-section">
+                <div class="section-header">
+                    <h2>Recent Test Results</h2>
+                    <a href="test.html" class="take-test-btn">
+                        <i class="test-icon">📝</i> Take New Test
+                    </a>
+                </div>
+                
+                <div class="tests-container" id="testsContainer">
+                    <!-- Tests will be loaded here -->
+                    <div class="no-tests-message" id="noTestsMessage">
+                        <div class="no-tests-icon">📝</div>
+                        <h3>No tests taken yet</h3>
+                        <p>Take your first personality test to see results here</p>
+                        <a href="test.html" class="start-first-test-btn">Start Your First Test</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Personality Insights -->
+            <div class="insights-section">
+                <h2>Your Personality Insights</h2>
+                <div class="insights-container" id="insightsContainer">
+                    <div class="insight-card">
+                        <h3>🧠 Dominant Traits</h3>
+                        <p id="dominantTraits">Take more tests to see your dominant personality traits</p>
+                    </div>
+                    
+                    <div class="insight-card">
+                        <h3>📊 Consistency Score</h3>
+                        <p id="consistencyScore">Your response consistency will be shown here</p>
+                    </div>
+                    
+                    <div class="insight-card">
+                        <h3>🎯 Recommended Areas</h3>
+                        <p id="recommendations">Personalized recommendations based on your results</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="dashboard-footer">
+        <div class="footer-content">
+            <p>&copy; 2025 Vyaktitva. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="index.html#privacy">Privacy Policy</a>
+                <a href="index.html#terms">Terms of Service</a>
+                <a href="index.html#contact">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Dashboard JavaScript -->
+    <script>
+        // Dashboard Functionality
+        class DashboardManager {
+            constructor() {
+                this.init();
+            }
+
+            init() {
+                this.checkAuthentication();
+                this.loadUserData();
+                this.loadTestResults();
+                this.setupEventListeners();
+            }
+
+            checkAuthentication() {
+                const username = localStorage.getItem('username');
+                if (!username) {
+                    alert('Please login to access dashboard');
+                    window.location.href = 'login.html';
+                    return;
+                }
+                
+                // Update UI with username
+                document.getElementById('userNameDisplay').textContent = username;
+                document.getElementById('accountButton').innerHTML = `Welcome, ${username} ▼`;
+            }
+
+            async loadUserData() {
+                const username = localStorage.getItem('username');
+                console.log("=== LOADING USER DATA ===");
+                console.log("Username:", username);
+                
+                if (!username) {
+                    console.error("No username found in localStorage");
+                    return;
+                }
+
+                let tests = [];
+
+                try {
+                    // First, try localStorage (always available)
+                    console.log("🔄 Loading from localStorage...");
+                    const allResults = JSON.parse(localStorage.getItem('userTestResults') || '{}');
+                    const localTests = allResults[username] || [];
+                    console.log("LocalStorage tests found:", localTests.length);
+                    
+                    if (localTests.length > 0) {
+                        tests = localTests.map(test => ({
+                            ...test,
+                            score: test.score || Math.round(test.scores?.['Overall Score']) || 0,
+                            personalityType: test.personalityType || this.determinePersonalityType(test.scores || {}),
+                            jobCategory: test.jobCategory || 'Not Available',
+                            jobRoles: test.jobRoles || []
+                        })).sort((a, b) => new Date(b.date) - new Date(a.date));
+                        
+                        console.log("✅ Using localStorage data:", tests.length, "tests");
+                    }
+
+                    // Then try database (might fail)
+                    console.log("🔄 Attempting database fetch...");
+                    const response = await fetch(`/api/get-test-results/${username}`);
+                    
+                    if (response.ok) {
+                        const dbTests = await response.json();
+                        console.log("Database tests found:", dbTests.length);
+                        
+                        if (dbTests.length > 0) {
+                            // Use database data if available
+                            tests = dbTests.map(test => ({
+                                id: test._id,
+                                date: test.testDate,
+                                score: Math.round(test.scores['Overall Score']) || 0,
+                                personalityType: this.determinePersonalityType(test.scores),
+                                jobCategory: test.jobRecommendation?.category || 'Not Available',
+                                jobRoles: test.jobRecommendation?.roles || [],
+                                totalQuestions: test.totalQuestions || 40,
+                                timeTaken: test.timeTaken || 'N/A',
+                                scores: test.scores,
+                                jobRecommendation: test.jobRecommendation
+                            })).sort((a, b) => new Date(b.date) - new Date(a.date));
+                            
+                            console.log("✅ Using database data:", tests.length, "tests");
+                        }
+                    } else {
+                        console.warn("⚠️ Database fetch failed, using localStorage only");
+                    }
+
+                } catch (error) {
+                    console.error('❌ Error loading data:', error);
+                    console.log("📦 Falling back to localStorage only");
+                }
+
+                console.log("Final tests array:", tests);
+                
+                // Update UI with data
+                this.updateStats(tests);
+                this.updateInsights(tests);
+                this.displayTests(tests);
+                
+                // Show data source info
+                if (tests.length === 0) {
+                    console.log("❌ No tests found - showing empty state");
+                } else {
+                    console.log(`✅ Dashboard loaded with ${tests.length} tests`);
+                }
+            }
+
+            determinePersonalityType(scores) {
+                // Simple logic to determine personality type from scores
+                const traits = [
+                    { name: 'Leader', score: scores.Leadership },
+                    { name: 'Empathetic', score: scores['Empathy & Social Skills'] },
+                    { name: 'Strategic Thinker', score: scores['Strategic Thinking & Problem-Solving'] },
+                    { name: 'Creative', score: scores['Creativity & Innovation'] },
+                    { name: 'Resilient', score: scores['Resilience & Adaptability'] }
+                ];
+                
+                const dominant = traits.reduce((max, trait) => 
+                    trait.score > max.score ? trait : max
+                );
+                
+                return dominant.name;
+            }
+
+            getUserTests(username) {
+                const allTests = JSON.parse(localStorage.getItem('userTestResults') || '{}');
+                const userTests = allTests[username] || [];
+                
+                // Ensure proper sorting for localStorage data too
+                return userTests
+                    .map(test => ({
+                        ...test,
+                        score: test.score || Math.round(test.scores?.['Overall Score']) || 0
+                    }))
+                    .sort((a, b) => new Date(b.date) - new Date(a.date));
+            }
+
+            updateStats(tests) {
+                const totalTests = tests.length;
+                document.getElementById('totalTests').textContent = totalTests;
+
+                if (totalTests > 0) {
+                    // FIXED: Get the most recent test (first in sorted array)
+                    const mostRecentTest = tests[0]; // Tests are sorted by date DESC from database
+                    const scores = tests.map(test => {
+                        // Ensure score is properly calculated
+                        if (typeof test.score === 'number') {
+                            return test.score;
+                        } else if (test.scores && test.scores['Overall Score']) {
+                            return Math.round(test.scores['Overall Score']);
+                        } else {
+                            return 0;
+                        }
+                    });
+
+                    // Calculate stats with proper values
+                    const lastScore = mostRecentTest.score || Math.round(mostRecentTest.scores['Overall Score']) || 0;
+                    const avgScore = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
+                    const bestScore = Math.max(...scores);
+
+                    console.log("=== DASHBOARD STATS DEBUG ===");
+                    console.log("Total Tests:", totalTests);
+                    console.log("Most Recent Test:", mostRecentTest);
+                    console.log("Last Score (Raw):", lastScore);
+                    console.log("All Scores:", scores);
+                    console.log("Average Score:", avgScore);
+                    console.log("Best Score:", bestScore);
+
+                    // Update UI with correct values
+                    document.getElementById('lastScore').textContent = `${lastScore}%`;
+                    document.getElementById('avgScore').textContent = `${avgScore}%`;
+                    document.getElementById('bestScore').textContent = `${bestScore}%`;
+                } else {
+                    document.getElementById('lastScore').textContent = '--';
+                    document.getElementById('avgScore').textContent = '--';
+                    document.getElementById('bestScore').textContent = '--';
+                }
+            }
+
+            displayTests(tests) {
+                const container = document.getElementById('testsContainer');
+                const noTestsMessage = document.getElementById('noTestsMessage');
+
+                if (tests.length === 0) {
+                    noTestsMessage.style.display = 'block';
+                    return;
+                }
+
+                noTestsMessage.style.display = 'none';
+
+                // Show last 5 tests (already sorted by date DESC)
+                const recentTests = tests.slice(0, 5);
+                
+                container.innerHTML = recentTests.map((test, index) => `
+                    <div class="test-result-card" id="test-card-${test.id}">
+                        <div class="test-header">
+                            <h3>Test #${tests.length - index}</h3>
+                            <div class="test-header-actions">
+                                <span class="test-date">${new Date(test.date).toLocaleDateString()}</span>
+                                <button onclick="deleteTest('${test.id}', '${tests.length - index}')" 
+                                        class="delete-test-btn" 
+                                        title="Delete this test result">
+                                    🗑️
+                                </button>
+                            </div>
+                        </div>
+                        <div class="test-content">
+                            <div class="score-display">
+                                <div class="score-circle">
+                                    <span class="score-text">${test.score}%</span>
+                                </div>
+                            </div>
+                            <div class="test-details">
+                                <p><strong>Personality Type:</strong> ${test.personalityType}</p>
+                                <p><strong>Job Category:</strong> ${test.jobCategory || 'Not Available'}</p>
+                                <p><strong>Questions Answered:</strong> ${test.totalQuestions}</p>
+                                <p><strong>Time Taken:</strong> ${test.timeTaken || 'N/A'}</p>
+                                <p><strong>Test Date:</strong> ${new Date(test.date).toLocaleString()}</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Job Recommendations Section -->
+                        <div class="job-recommendations">
+                            <h4 class="job-rec-title">💼 Recommended Job Roles:</h4>
+                            <div class="job-roles-list">
+                                ${test.jobRoles && test.jobRoles.length > 0 ? 
+                                    test.jobRoles.map(role => 
+                                        `<span class="job-role-tag">${role}</span>`
+                                    ).join('') : 
+                                    '<span class="no-jobs">No specific roles available</span>'
+                                }
+                            </div>
+                        </div>
+                        
+                        <div class="test-actions">
+                            <button onclick="viewTestDetails('${test.id}')" class="view-details-btn">
+                                📊 View Details
+                            </button>
+                            <button onclick="retakeTest()" class="retake-btn">
+                                🔄 Retake Test
+                            </button>
+                            <button onclick="confirmDeleteTest('${test.id}', '${tests.length - index}')" class="delete-action-btn">
+                                🗑️ Delete Test
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            updateInsights(tests) {
+                if (tests.length === 0) return;
+
+                // Calculate dominant traits
+                const traitCounts = {};
+                tests.forEach(test => {
+                    if (test.personalityType) {
+                        traitCounts[test.personalityType] = (traitCounts[test.personalityType] || 0) + 1;
+                    }
+                });
+
+                const dominantTrait = Object.keys(traitCounts).reduce((a, b) => 
+                    traitCounts[a] > traitCounts[b] ? a : b
+                );
+
+                document.getElementById('dominantTraits').textContent = 
+                    `Your most common personality type: ${dominantTrait}`;
+
+                // Calculate consistency
+                const scores = tests.map(test => test.score);
+                const avgScore = scores.reduce((a, b) => a + b, 0) / scores.length;
+                const variance = scores.reduce((acc, score) => acc + Math.pow(score - avgScore, 2), 0) / scores.length;
+                const consistency = Math.max(0, 100 - Math.sqrt(variance));
+
+                document.getElementById('consistencyScore').textContent = 
+                    `${Math.round(consistency)}% - ${consistency > 70 ? 'High' : consistency > 40 ? 'Medium' : 'Low'} consistency in responses`;
+
+                // Generate recommendations
+                const latestScore = tests[tests.length - 1].score;
+                let recommendation = '';
+                if (latestScore >= 80) {
+                    recommendation = 'Excellent! Consider exploring leadership roles that match your personality type.';
+                } else if (latestScore >= 60) {
+                    recommendation = 'Good progress! Focus on developing your weaker trait areas.';
+                } else {
+                    recommendation = 'Keep practicing! Regular self-reflection can help improve your scores.';
+                }
+
+                document.getElementById('recommendations').textContent = recommendation;
+            }
+
+            setupEventListeners() {
+                // Additional event listeners can be added here
+            }
+        }
+
+        // Global Functions
+        function toggleDropdown(event) {
+            event.stopPropagation();
+            const dropdown = document.getElementById('dropdownMenu');
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function toggleMobileMenu() {
+            const navLinks = document.getElementById('navLinks');
+            const mobileToggle = document.getElementById('mobileToggle');
+            navLinks.classList.toggle('active');
+            mobileToggle.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
+        }
+
+        function logout(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('username');
+                localStorage.removeItem('userToken');
+                window.location.href = 'index.html';
+            }
+        }
+
+        function viewTestDetails(testId) {
+            alert(`Test details for ID: ${testId}\n(This would open a detailed view)`);
+        }
+
+        function retakeTest() {
+            window.location.href = 'test.html';
+        }
+
+        // Confirm Delete with Beautiful Modal
+        function confirmDeleteTest(testId, testNumber) {
+            // Create custom confirmation modal
+            const modal = document.createElement('div');
+            modal.className = 'delete-confirmation-modal';
+            modal.innerHTML = `
+                <div class="modal-overlay"></div>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>🗑️ Delete Test Result</h3>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to delete <strong>Test #${testNumber}</strong>?</p>
+                        <p class="warning-text">⚠️ This action cannot be undone!</p>
+                    </div>
+                    <div class="modal-actions">
+                        <button onclick="closeDeleteModal()" class="cancel-btn">
+                            ❌ Cancel
+                        </button>
+                        <button onclick="deleteTest('${testId}', '${testNumber}')" class="confirm-delete-btn">
+                            🗑️ Delete
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Animate modal in
+            setTimeout(() => {
+                modal.classList.add('modal-active');
+            }, 10);
+        }
+
+        // Close Delete Modal
+        function closeDeleteModal() {
+            const modal = document.querySelector('.delete-confirmation-modal');
+            if (modal) {
+                modal.classList.remove('modal-active');
+                setTimeout(() => {
+                    modal.remove();
+                }, 300);
+            }
+        }
+
+        // Delete Test Function
+        async function deleteTest(testId, testNumber) {
+            const username = localStorage.getItem('username');
+            
+            try {
+                // Show loading state
+                showDeleteNotification('Deleting test result...', 'loading');
+                
+                // Try to delete from database first
+                const dbResponse = await fetch(`/api/delete-test-result/${testId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (dbResponse.ok) {
+                    console.log('✅ Test deleted from database');
+                } else {
+                    console.warn('⚠️ Database delete failed, proceeding with localStorage only');
+                }
+
+                // Delete from localStorage
+                const allResults = JSON.parse(localStorage.getItem('userTestResults') || '{}');
+                if (allResults[username]) {
+                    // Find and remove the test by ID
+                    allResults[username] = allResults[username].filter(test => test.id !== testId);
+                    localStorage.setItem('userTestResults', JSON.stringify(allResults));
+                    console.log('✅ Test deleted from localStorage');
+                }
+
+                // Remove the test card with animation
+                const testCard = document.getElementById(`test-card-${testId}`);
+                if (testCard) {
+                    testCard.style.transition = 'all 0.3s ease';
+                    testCard.style.transform = 'translateX(-100%)';
+                    testCard.style.opacity = '0';
+                    
+                    setTimeout(() => {
+                        testCard.remove();
+                        
+                        // Reload dashboard data
+                        const dashboardManager = new DashboardManager();
+                        dashboardManager.loadUserData();
+                        
+                        showDeleteNotification(`Test #${testNumber} deleted successfully!`, 'success');
+                    }, 300);
+                }
+
+                // Close modal
+                closeDeleteModal();
+
+            } catch (error) {
+                console.error('❌ Delete error:', error);
+                showDeleteNotification('Failed to delete test result', 'error');
+            }
+        }
+
+        // Show Delete Notification
+        function showDeleteNotification(message, type = 'info') {
+            // Remove existing notification
+            const existing = document.querySelector('.delete-notification');
+            if (existing) existing.remove();
+            
+            const notification = document.createElement('div');
+            notification.className = `delete-notification ${type}`;
+            
+            let icon = 'ℹ️';
+            let bgColor = 'linear-gradient(135deg, #2196f3, #21cbf3)';
+            
+            if (type === 'success') {
+                icon = '✅';
+                bgColor = 'linear-gradient(135deg, #4caf50, #8bc34a)';
+            } else if (type === 'error') {
+                icon = '❌';
+                bgColor = 'linear-gradient(135deg, #f44336, #ff5722)';
+            } else if (type === 'loading') {
+                icon = '🔄';
+                bgColor = 'linear-gradient(135deg, #ff9800, #ffc107)';
+            }
+            
+            notification.innerHTML = `
+                <div class="notification-content">
+                    <span class="notification-icon">${icon}</span>
+                    <span class="notification-text">${message}</span>
+                    <button class="notification-close" onclick="this.parentElement.parentElement.remove()">×</button>
+                </div>
+            `;
+            
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 10000;
+                padding: 1rem;
+                border-radius: 12px;
+                box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+                max-width: 350px;
+                background: ${bgColor};
+                color: white;
+                transform: translateX(100%);
+                transition: all 0.3s ease;
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Auto remove after 4 seconds (except loading)
+            if (type !== 'loading') {
+                setTimeout(() => {
+                    if (notification.parentElement) {
+                        notification.style.transform = 'translateX(100%)';
+                        setTimeout(() => notification.remove(), 300);
+                    }
+                }, 4000);
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const accountMenu = document.querySelector('.account-menu');
+            const dropdown = document.getElementById('dropdownMenu');
+            if (!accountMenu.contains(event.target) && dropdown.style.display === 'block') {
+                dropdown.style.display = 'none';
+            }
+        });
+
+        // Initialize Dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            new DashboardManager();
+        });
+    </script>
+</body>
+</html>

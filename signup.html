@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup - Vyaktitva</title>
+    <link rel="stylesheet" href="style1.css"> <!-- Link to your stylesheet -->
+</head>
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <img src="img/logo.png" alt="Vyaktitva Logo" class="hero-logo">
+        <h1>Vyaktitva</h1>
+        <p>Discover your personality traits!</p>
+    </div>
+
+    <!-- Main Container for Signup and Image -->
+    <div class="main-container">
+        <!-- Signup Container -->
+        <div class="login-container">
+            <h2>Create Your Account</h2>
+            <form id="signupForm">
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="input-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="dob">Date of Birth</label>
+                    <input type="date" id="dob" name="dob" required>
+                </div>
+                <div class="input-group">
+                    <label for="gender">Gender</label>
+                    <select id="gender" name="gender" required>
+                        <option value="" disabled selected>Select your gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                        <option value="preferNotToSay">Prefer not to say</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="location">Location</label>
+                    <input type="text" id="location" name="location" placeholder="City, State, Country" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div class="input-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                </div>
+
+                <div class="input-group-checkbox">
+                    <input type="checkbox" id="terms" name="terms" required>
+                    <label for="terms">I agree to the <a href="#">Terms and Conditions</a></label>
+                </div>
+                <button type="submit" class="login-button">Sign Up</button>
+            </form>
+            <p>Already have an account? <a href="login.html">Login here</a></p>
+        </div>
+
+    </div>
+
+    <script>
+        document.getElementById('signupForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const dob = document.getElementById('dob').value;
+            const gender = document.getElementById('gender').value;
+            const location = document.getElementById('location').value;
+
+            // Check if password and confirm password match
+            if (password !== confirmPassword) {
+                alert('Passwords do not match!');
+                return; // Stop form submission
+            }
+
+            try {
+                const response = await fetch('/signup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email, password, dob, gender, location })
+                });
+
+                if (response.ok) {
+                    alert('Signup successful! Please login.');
+                    window.location.href = 'login.html'; // Redirect to login page
+                } else {
+                    const errorMessage = await response.text();
+                    alert('Error: ' + errorMessage);
+                }
+            } catch (error) {
+                console.error('Signup failed:', error);
+                alert('An error occurred during signup. Please try again.');
+            }
+        });
+
+        // Update the signup success handler
+        function handleSignupSuccess(username) {
+            localStorage.setItem('username', username);
+            localStorage.setItem('userToken', 'logged-in');
+            
+            // Check if user came from test selection
+            const redirectAfterSignup = localStorage.getItem('redirectAfterSignup');
+            if (redirectAfterSignup === 'test') {
+                localStorage.removeItem('redirectAfterSignup');
+                window.location.href = 'test.html';
+            } else {
+                window.location.href = 'dashboard.html';
+            }
+        }
+    </script>
+
+</body>
+
+</html>

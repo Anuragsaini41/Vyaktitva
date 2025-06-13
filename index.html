@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vyaktitva Personality Test</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="/img/logo.png" type="image/png" />
+    <style>
+      html {
+        scroll-behavior: smooth;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Enhanced Navigation Bar -->
+    <nav class="navbar">
+      <!-- Brand Section -->
+      <a href="#" class="navbar-brand">
+        <img src="/img/logo.png" alt="Vyaktitva Logo" class="navbar-logo" />
+        <h1>Vyaktitva</h1>
+      </a>
+
+      <!-- Navigation Links -->
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#greeting-section">Home</a></li>
+        <li><a href="#personality-traits">Personality Traits</a></li>
+        <li><a href="#team">Team</a></li>
+      </ul>
+
+      <!-- Right Actions -->
+      <div class="navbar-actions">
+        <!-- Account Menu -->
+        <div class="account-menu">
+          <button class="account-btn" onclick="toggleDropdown()">
+            My Account ▼
+          </button>
+          <div class="dropdown-content" id="dropdownMenu">
+            <a href="#" onclick="openLoginModal()">
+              <i class="login-icon">👤</i> Login
+            </a>
+            <a href="#" onclick="openSignupModal()">
+              <i class="signup-icon">✨</i> Sign Up
+            </a>
+            <button onclick="logout()" style="display: none" id="logoutBtn">
+              <i class="logout-icon">🚪</i> Logout
+            </button>
+          </div>
+        </div>
+
+        <!-- Start Test Button - Update this section -->
+        <a
+          href="#"
+          onclick="handleStartTest()"
+          class="start-test-button"
+          id="startTestBtn"
+        >
+          🚀 Start Test
+        </a>
+
+        <!-- Mobile Menu Toggle -->
+        <button
+          class="mobile-menu-toggle"
+          onclick="toggleMobileMenu()"
+          id="mobileToggle"
+        >
+          ☰
+        </button>
+      </div>
+    </nav>
+
+    <!-- Preloader -->
+    <div id="preloader">
+      <div class="loader"></div>
+    </div>
+
+    <!-- Greeting Section -->
+    <section id="greeting-section">
+      <div class="greeting-content">
+        <div class="greeting-text">
+          <h2 id="greeting-message"></h2>
+          <h1 style="font-size: 40px">Welcome to Vyaktitva!</h1>
+          <p>
+            Welcome to Vyaktitva! Discover your personality traits and see how
+            they align with different career paths. Explore and find out what
+            roles best fit your unique strengths.
+          </p>
+        </div>
+        <div class="greeting-image">
+          <img src="/img/greeting.png" alt="Welcome Image" />
+        </div>
+      </div>
+    </section>
+
+    <div class="content">
+      <!-- Section 1: Understanding Personality Traits -->
+      <section id="personality-traits">
+        <h2>Understanding The Various Personality Traits</h2>
+        <div class="traits-container">
+          <div class="trait">
+            <img src="/img/leader.jpg" alt="Leadership" />
+            <div class="trait-content">
+              <h3>Leadership:</h3>
+              <p>
+                The capacity to guide, influence, and inspire others with vision
+                and integrity. Effective leaders motivate their teams, drive
+                progress, and cultivate an environment where everyone is
+                empowered to contribute their best. Their influence creates a
+                path forward, fostering collaboration and achieving shared
+                goals.
+              </p>
+            </div>
+          </div>
+          <div class="trait">
+            <img src="/img/management.jpg" alt="Management" />
+            <div class="trait-content">
+              <h3>Management:</h3>
+              <p>
+                The adeptness at organizing and coordinating tasks to achieve
+                objectives with efficiency and precision. Skilled managers
+                streamline workflows, delegate responsibilities effectively, and
+                ensure that all efforts are aligned towards meeting goals. Their
+                strategic approach enhances productivity and drives success.
+              </p>
+            </div>
+          </div>
+          <div class="trait">
+            <img src="/img/hardworking.jpeg" alt="Hardworking" />
+            <div class="trait-content">
+              <h3>Hardworking:</h3>
+              <p>
+                Demonstrates unwavering dedication and consistent effort to
+                achieve outstanding results. A hardworking individual
+                persistently tackles challenges, invests time and energy into
+                tasks, and maintains a relentless focus on goals. Their
+                commitment and perseverance lead to significant accomplishments
+                and success.
+              </p>
+            </div>
+          </div>
+          <div class="trait">
+            <img src="/img/selfish.jpeg" alt="Selfish" />
+            <div class="trait-content">
+              <h3>Selfish:</h3>
+              <p>
+                Exhibits a tendency to place personal needs and desires above
+                those of others. A selfish individual often prioritizes their
+                own interests and goals, sometimes at the expense of collective
+                well-being or shared responsibilities. This focus on self can
+                lead to actions that favor personal gain over mutual benefit.
+              </p>
+            </div>
+          </div>
+          <div class="trait">
+            <img src="/img/kindness.jpeg" alt="Kindness" />
+            <div class="trait-content">
+              <h3>Kindness:</h3>
+              <p>
+                Exhibits a tendency to place personal needs and desires above
+                those of others. A selfish individual often prioritizes their
+                own interests and goals, sometimes at the expense of collective
+                well-being or shared responsibilities. This focus on self can
+                lead to actions that favor personal gain over mutual benefit.
+              </p>
+            </div>
+          </div>
+          <div class="trait">
+            <img src="/img/emotional.jpg" alt="Emotional Intelligence" />
+            <div class="trait-content">
+              <h3>Emotional Intelligence:</h3>
+              <p>
+                The ability to understand and manage your own emotions, while
+                recognizing and influencing the emotions of others. It involves
+                using this awareness to improve communication and relationships.
+                Mastery of emotional intelligence enhances personal and
+                professional interactions through empathy and self-regulation.
+              </p>
+            </div>
+          </div>
+          <div class="trait">
+            <img src="/img/empathy.jpeg" alt="Empathy" />
+            <div class="trait-content">
+              <h3>Empathy:</h3>
+              <p>
+                The ability to deeply understand and share the feelings of
+                others, seeing things from their perspective. It involves
+                recognizing and resonating with the emotions of those around
+                you. This capacity for emotional connection strengthens
+                relationships and fosters compassionate communication.
+              </p>
+            </div>
+          </div>
+          <div class="trait">
+            <img src="/img/organizer.jpg" alt="Organized" />
+            <div class="trait-content">
+              <h3>Organized/Structural:</h3>
+              <p>
+                A strong preference for maintaining order and clarity through
+                meticulous planning and adherence to established systems. This
+                trait ensures tasks are executed efficiently and processes are
+                streamlined. It supports a structured approach to achieving
+                goals and managing responsibilities.
+              </p>
+            </div>
+          </div>
+          <div class="trait">
+            <img src="/img/creative.jpg" alt="Creative" />
+            <div class="trait-content">
+              <h3>Creative:</h3>
+              <p>
+                The ability to think outside conventional boundaries and
+                generate innovative solutions. This trait involves imagining new
+                possibilities and approaches, fostering originality and fresh
+                ideas. It drives problem-solving through unique and inventive
+                thinking.
+              </p>
+            </div>
+          </div>
+          <!-- More traits... -->
+        </div>
+      </section>
+
+      <!-- Section 2: Thank You Note -->
+      <section id="thank-you">
+        <div class="thankyou-content">
+          <div class="professor-details">
+            <h2>Thank You for Your Guidance.</h2>
+            <p>
+              We sincerely appreciate your time and effort in contributing to the development of our psychology-based career recommendation system. Your insights are instrumental in helping us deepen our understanding of personality traits and their influence on professional roles.
+
+            </p>
+            <p>
+              This project, which integrates psychological principles with machine learning, aims to recommend suitable career paths based on individual personality profiles.
+ <p>We are especially grateful to Dr. Deepshikha, an esteemed Assistant Professor at Shobhit University, who is guiding our project with her extensive expertise. With over 15 years of experience as a psychologist, and academic credentials including a BA, MA, and PhD in Psychology, Dr. Deepshikha’s mentorship has been invaluable in ensuring both scientific depth and practical relevance.</p>
+            </p>
+          </div>
+          <img src="/img/doctor.jpg" alt="Dr. Jane Doe" />
+        </div>
+      </section>
+
+      <!-- Section 3: Meet Our Team -->
+      <div id="team">
+        <h2>Meet Our Team</h2>
+        <div class="team-container">
+          <div class="team-member">
+            <img
+              src="/img/Anurag_Saini.jpg"
+              alt="Member 3"
+              loading="lazy"
+              width="200"
+              height="200"
+            />
+
+            <p>
+              <b>Role:</b> Full Stack Developer<br />
+              <b>Name:</b> Anurag Saini<br />
+              <b>Details:</b> Anurag is a Full Stack Developer with expertise in
+              HTML, CSS, JavaScript, React, Node.js, Express.js, and MongoDB. He
+              played a leading role in both frontend and backend development,
+              ensuring seamless integration and smooth user experience
+              throughout the application.
+            </p>
+            <a
+              href="https://www.linkedin.com/in/anurag-saini-a9116b237/"
+              class="linkedin-button"
+              >Connect on LinkedIn →</a
+            >
+          </div>
+          <div class="team-member">
+            <img
+              src="/img/Arpit_Chauhan.jpg"
+              alt="Member 2"
+              loading="lazy"
+              width="200"
+              height="200"
+            />
+            <p>
+              <b>Role:</b> Frontend & Python Developer<br />
+              <b>Name:</b> Arpit Chauhan<br />
+              <b>Details:</b> Arpit is a developer skilled in frontend
+              technologies and Python. He contributed to building responsive
+              user interfaces and integrating Python-based backend logic and
+              APIs that support the core functionality of the project.
+            </p>
+            <a
+              href="https://www.linkedin.com/in/arpiitchauhan/"
+              class="linkedin-button"
+              >Connect on LinkedIn →</a
+            >
+          </div>
+          <div class="team-member">
+            <img
+              src="/img/Akshay_Saini.jpg"
+              alt="Member 4"
+              loading="lazy"
+              width="200"
+              height="200"
+            />
+            <p>
+              <b>Role:</b> Backend Developer<br />
+              <b>Name:</b> Akshay Saini<br />
+              <b>Details:</b> Akshay is a Backend Developer with a strong
+              command over Node.js and Express.js. He worked on designing and
+              implementing backend services that ensure secure and efficient
+              data handling within the application.
+            </p>
+            <a
+              href="https://www.linkedin.com/in/akshay-saini-a08158217/"
+              class="linkedin-button"
+              >Connect on LinkedIn →</a
+            >
+          </div>
+          <div class="team-member">
+            <img
+              src="/img/Chirag_Shama.jpg"
+              alt="Member 1"
+              loading="lazy"
+              width="200"
+              height="200"
+            />
+            <p>
+              <b>Role:</b> Machine Learning<br />
+              <b>Name:</b> Chirag Sharma<br />
+              <b>Details:</b> Chirag contributed to the machine learning and
+              data science components of the project. He worked on Job Category Recommendation Pridiction logic by applying ML models and data-driven techniques
+              to enhance the system’s functionality.
+            </p>
+            <a
+              href="https://www.linkedin.com/in/chirag-sharma-b1774424a/"
+              class="linkedin-button"
+              >Connect on LinkedIn →</a
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Horizontal Line -->
+      <hr class="separator" />
+      <footer id="footer">
+        <div class="footer-content">
+          <div class="footer-links">
+            <a href="about.html">About Us</a>
+            <a href="contact.html">Contact Us</a>
+            <a href="privacy-policy.html">Privacy Policy</a>
+            <a href="tos.html">Terms of Service</a>
+            <a
+              href="https://www.centraltest.com/blog/how-personality-tests-help-improving-self-knowledge"
+              >Blog</a
+            >
+          </div>
+
+          <p>&copy; 2024 Vyaktitva. All rights reserved.</p>
+        </div>
+      </footer>
+
+      <script src="script.js"></script>
+      <script>
+        // FIXED: Single Dropdown Toggle Function - No Conflicts
+        function toggleDropdown(event) {
+          event.stopPropagation(); // Prevent event bubbling
+          const dropdown = document.getElementById("dropdownMenu");
+
+          if (dropdown.style.display === "block") {
+            dropdown.style.display = "none";
+          } else {
+            dropdown.style.display = "block";
+          }
+        }
+
+        function toggleMobileMenu() {
+          const navLinks = document.getElementById("navLinks");
+          const mobileToggle = document.getElementById("mobileToggle");
+
+          navLinks.classList.toggle("active");
+          mobileToggle.textContent = navLinks.classList.contains("active")
+            ? "✕"
+            : "☰";
+        }
+
+        // FIXED: Better Outside Click Handler
+        document.addEventListener("click", function (event) {
+          const accountMenu = document.querySelector(".account-menu");
+          const dropdown = document.getElementById("dropdownMenu");
+
+          // Only close if click is outside account menu AND dropdown is visible
+          if (
+            !accountMenu.contains(event.target) &&
+            dropdown.style.display === "block"
+          ) {
+            dropdown.style.display = "none";
+          }
+        });
+
+        // Enhanced scroll effect
+        window.addEventListener("scroll", function () {
+          const navbar = document.querySelector(".navbar");
+          if (window.scrollY > 50) {
+            navbar.classList.add("scrolled");
+          } else {
+            navbar.classList.remove("scrolled");
+          }
+        });
+
+        // Smooth scroll for navigation links
+        document
+          .querySelectorAll('.nav-links a[href^="#"]')
+          .forEach((anchor) => {
+            anchor.addEventListener("click", function (e) {
+              e.preventDefault();
+              const target = document.querySelector(this.getAttribute("href"));
+              if (target) {
+                target.scrollIntoView({
+                  behavior: "smooth",
+                  block: "start",
+                });
+              }
+
+              // Close mobile menu if open
+              const navLinks = document.getElementById("navLinks");
+              const mobileToggle = document.getElementById("mobileToggle");
+              navLinks.classList.remove("active");
+              mobileToggle.textContent = "☰";
+            });
+          });
+
+        // FIXED: Proper Login/Signup Functions - Redirect to Pages
+        function openLoginModal(event) {
+          event.preventDefault();
+          event.stopPropagation();
+          // Redirect to login page instead of showing popup
+          window.location.href = "login.html";
+        }
+
+        function openSignupModal(event) {
+          event.preventDefault();
+          event.stopPropagation();
+          // Redirect to signup page instead of showing popup
+          window.location.href = "signup.html";
+        }
+
+        function logout(event) {
+          event.preventDefault();
+          event.stopPropagation();
+          // Clear user data and redirect
+          localStorage.removeItem("username");
+          localStorage.removeItem("userToken");
+          alert("Successfully logged out!");
+          window.location.reload(); // Refresh the page
+        }
+
+        // ENHANCED: Handle Start Test Button Click
+        function handleStartTest() {
+          const username = localStorage.getItem("username");
+
+          if (username) {
+            // User is logged in, go directly to test
+            window.location.href = "test.html";
+          } else {
+            // User is not logged in, show test mode selection
+            window.location.href = "test-selection.html";
+          }
+        }
+
+        // Update the existing checkLoginStatus function
+        function checkLoginStatus() {
+          const username = localStorage.getItem("username");
+          const accountBtn = document.querySelector(".account-btn");
+          const dropdownContent = document.getElementById("dropdownMenu");
+          const startTestBtn = document.getElementById("startTestBtn");
+
+          if (username) {
+            // User is logged in - update button and dropdown
+            accountBtn.innerHTML = `Welcome, ${username} ▼`;
+            dropdownContent.innerHTML = `
+                        <a href="dashboard.html">
+                            <i class="dashboard-icon">📊</i> Dashboard
+                        </a>
+                        <a href="test.html">
+                            <i class="test-icon">📝</i> Take Test
+                        </a>
+                        <button onclick="logout(event)">
+                            <i class="logout-icon">🚪</i> Logout
+                        </button>
+                    `;
+
+            // Update start test button for logged in users
+            if (startTestBtn) {
+              startTestBtn.innerHTML = "📊 Take Test";
+              startTestBtn.style.background =
+                "linear-gradient(135deg, #4caf50 0%, #8bc34a 100%)";
+            }
+          } else {
+            // User is not logged in - show login/signup options
+            accountBtn.innerHTML = "My Account ▼";
+            dropdownContent.innerHTML = `
+                        <a href="#" onclick="openLoginModal(event)">
+                            <i class="login-icon">👤</i> Login
+                        </a>
+                        <a href="#" onclick="openSignupModal(event)">
+                            <i class="signup-icon">✨</i> Sign Up
+                        </a>
+                    `;
+
+            // Update start test button for guests
+            if (startTestBtn) {
+              startTestBtn.innerHTML = "🚀 Start Test";
+              startTestBtn.style.background = ""; // Reset to default
+            }
+          }
+        }
+
+        // FIXED: Single DOMContentLoaded Event Listener
+        document.addEventListener("DOMContentLoaded", function () {
+          // Initialize login status
+          checkLoginStatus();
+
+          // Setup account button click handler
+          const accountBtn = document.querySelector(".account-btn");
+          if (accountBtn) {
+            // Remove any existing event listeners
+            accountBtn.removeEventListener("click", toggleDropdown);
+            // Add new event listener
+            accountBtn.addEventListener("click", toggleDropdown);
+          }
+
+          console.log("Dropdown functionality initialized");
+        });
+
+        // Enhanced Animation CSS for smooth dropdown
+        const style = document.createElement("style");
+        style.textContent = `
+            @keyframes dropdownSlide {
+                from {
+                    opacity: 0;
+                    transform: translateY(-10px) scale(0.95);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0) scale(1);
+                }
+            }
+
+            @keyframes dropdownSlideOut {
+                from {
+                    opacity: 1;
+                    transform: translateY(0) scale(1);
+                }
+                to {
+                    opacity: 0;
+                    transform: translateY(-10px) scale(0.95);
+                }
+            }
+
+            /* Enhanced dropdown styling with better visibility */
+            .dropdown-content {
+                transition: all 0.3s ease;
+                animation: dropdownSlide 0.3s ease-out;
+            }
+
+            .dropdown-content a,
+            .dropdown-content button {
+                transition: all 0.2s ease;
+            }
+
+            .dropdown-content a:hover,
+            .dropdown-content button:hover {
+                background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(240, 147, 251, 0.15));
+                color: #667eea;
+                transform: translateX(8px);
+                padding-left: 25px;
+            }
+
+            /* Welcome message styling for logged in users */
+            .account-btn.logged-in {
+                background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(139, 195, 74, 0.2));
+                border-color: rgba(76, 175, 80, 0.5);
+            }
+
+            .account-btn.logged-in:hover {
+                border-color: rgba(76, 175, 80, 0.8);
+                box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
+            }
+
+            /* Enhanced dropdown with better z-index and positioning */
+            .dropdown-content {
+                display: none;
+                position: absolute;
+                top: 120%;
+                right: 0;
+                background: rgba(255, 255, 255, 0.98);
+                backdrop-filter: blur(25px);
+                -webkit-backdrop-filter: blur(25px);
+                color: #2d3748;
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+                border-radius: 16px;
+                border: 2px solid rgba(255, 255, 255, 0.4);
+                min-width: 240px;
+                z-index: 9999;
+                text-align: left;
+                padding: 0.75rem 0;
+                opacity: 1;
+                visibility: visible;
+            }
+
+            /* Account menu positioning fix */
+            .account-menu {
+                position: relative;
+                z-index: 1001;
+            }
+
+            .account-btn {
+                position: relative;
+                z-index: 1002;
+            }
+
+            /* Debug styling - temporary */
+            .dropdown-content.debug {
+                border: 3px solid red !important;
+                background: rgba(255, 0, 0, 0.1) !important;
+            }
+            `;
+        document.head.appendChild(style);
+      </script>
+
+      <!-- ...existing code... -->
+    </div>
+  </body>
+</html>

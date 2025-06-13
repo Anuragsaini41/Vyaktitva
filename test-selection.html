@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Test Mode - Vyaktitva</title>
+    <link rel="stylesheet" href="style1.css">
+    <link rel="shortcut icon" href="img/logo.png" type="image/x-icon">
+</head>
+<body>
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <img src="img/logo.png" alt="Vyaktitva Logo" class="hero-logo">
+        <h1>Vyaktitva</h1>
+        <p>Choose how you want to take the test</p>
+    </div>
+
+    <!-- Test Mode Selection Container -->
+    <div class="test-mode-container">
+        <div class="mode-selection-wrapper">
+            <h2>Choose Your Test Mode</h2>
+            <p class="subtitle">Select how you'd like to take your personality test</p>
+            
+            <div class="mode-cards">
+                <!-- Guest Mode Card -->
+                <div class="mode-card guest-mode">
+                    <div class="mode-icon">🌟</div>
+                    <h3>Start as Guest</h3>
+                    <p class="mode-description">
+                        Take the test immediately without creating an account.
+                        Perfect for quick exploration!
+                    </p>
+                    
+                    <div class="mode-features">
+                        <div class="feature">✅ Instant access</div>
+                        <div class="feature">✅ No registration required</div>
+                        <div class="feature">❌ Results won't be saved</div>
+                        <div class="feature">❌ No progress tracking</div>
+                    </div>
+                    
+                    <button onclick="startGuestTest()" class="mode-button guest-button">
+                        🚀 Start Test as Guest
+                    </button>
+                </div>
+
+                <!-- Login Mode Card -->
+                <div class="mode-card login-mode">
+                    <div class="mode-icon">🏆</div>
+                    <h3>Login to Test</h3>
+                    <p class="mode-description">
+                        Login or create an account to save your results and track 
+                        your personality development over time.
+                    </p>
+                    
+                    <div class="mode-features">
+                        <div class="feature">✅ Save test results</div>
+                        <div class="feature">✅ Track progress over time</div>
+                        <div class="feature">✅ Dashboard access</div>
+                        <div class="feature">✅ Detailed insights</div>
+                    </div>
+                    
+                    <div class="login-buttons">
+                        <button onclick="goToLogin()" class="mode-button login-button">
+                            👤 Login to Test
+                        </button>
+                        <button onclick="goToSignup()" class="mode-button signup-button">
+                            ✨ Create Account
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Back to Home -->
+            <div class="back-home">
+                <a href="index.html" class="back-link">
+                    ← Back to Home
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comparison Section -->
+    <div class="comparison-section">
+        <div class="comparison-container">
+            <h3>Quick Comparison</h3>
+            <div class="comparison-table">
+                <div class="comparison-row header">
+                    <div class="feature-name">Feature</div>
+                    <div class="guest-col">Guest Mode</div>
+                    <div class="login-col">With Account</div>
+                </div>
+                
+                <div class="comparison-row">
+                    <div class="feature-name">Take Test</div>
+                    <div class="guest-col">✅</div>
+                    <div class="login-col">✅</div>
+                </div>
+                
+                <div class="comparison-row">
+                    <div class="feature-name">Save Results</div>
+                    <div class="guest-col">❌</div>
+                    <div class="login-col">✅</div>
+                </div>
+                
+                <div class="comparison-row">
+                    <div class="feature-name">Progress Tracking</div>
+                    <div class="guest-col">❌</div>
+                    <div class="login-col">✅</div>
+                </div>
+                
+                <div class="comparison-row">
+                    <div class="feature-name">Dashboard Access</div>
+                    <div class="guest-col">❌</div>
+                    <div class="login-col">✅</div>
+                </div>
+                
+                <div class="comparison-row">
+                    <div class="feature-name">Detailed Insights</div>
+                    <div class="guest-col">❌</div>
+                    <div class="login-col">✅</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript for functionality -->
+    <script>
+        // Check if user is already logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            const username = localStorage.getItem('username');
+            if (username) {
+                // User is logged in, redirect directly to test
+                window.location.href = 'test.html';
+            }
+        });
+
+        function startGuestTest() {
+            // Set guest mode flag
+            localStorage.setItem('testMode', 'guest');
+            localStorage.removeItem('username'); // Ensure no username is set
+            
+            // Add visual feedback
+            const button = event.target;
+            button.innerHTML = '🔄 Starting Test...';
+            button.disabled = true;
+            
+            // Redirect to test page after brief delay
+            setTimeout(() => {
+                window.location.href = 'test.html';
+            }, 1000);
+        }
+
+        function goToLogin() {
+            // Store that user wants to test after login
+            localStorage.setItem('redirectAfterLogin', 'test');
+            window.location.href = 'login.html';
+        }
+
+        function goToSignup() {
+            // Store that user wants to test after signup
+            localStorage.setItem('redirectAfterSignup', 'test');
+            window.location.href = 'signup.html';
+        }
+
+        // Add smooth scroll animations
+        document.querySelectorAll('.mode-button').forEach(button => {
+            button.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-3px) scale(1.02)';
+            });
+            
+            button.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Add card hover effects
+        document.querySelectorAll('.mode-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    </script>
+
+    <!-- Enhanced Styling -->
+    <style>
+        /* Test Mode Selection Specific Styles */
+        .test-mode-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            min-height: 60vh;
+        }
+
+        .mode-selection-wrapper {
+            max-width: 1000px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .mode-selection-wrapper h2 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 3rem;
+            color: var(--text-secondary);
+        }
+
+        .mode-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .mode-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 2px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mode-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            border-radius: 24px 24px 0 0;
+        }
+
+        .guest-mode::before {
+            background: var(--accent-gradient);
+        }
+
+        .login-mode::before {
+            background: var(--secondary-gradient);
+        }
+
+        .mode-card:hover {
+            box-shadow: var(--shadow-hover);
+            border-color: rgba(240, 147, 251, 0.4);
+        }
+
+        .mode-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+        }
+
+        .mode-card h3 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .mode-description {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        .mode-features {
+            text-align: left;
+            margin-bottom: 2rem;
+        }
+
+        .feature {
+            padding: 0.5rem 0;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            opacity: 0.9;
+        }
+
+        .mode-button {
+            width: 100%;
+            padding: 16px 24px;
+            border: none;
+            border-radius: 16px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .guest-button {
+            background: var(--accent-gradient);
+            color: white;
+            box-shadow: 0 8px 20px rgba(79, 172, 254, 0.4);
+        }
+
+        .guest-button:hover {
+            box-shadow: 0 12px 30px rgba(79, 172, 254, 0.6);
+        }
+
+        .login-button {
+            background: var(--secondary-gradient);
+            color: white;
+            box-shadow: 0 8px 20px rgba(245, 87, 108, 0.4);
+        }
+
+        .login-button:hover {
+            box-shadow: 0 12px 30px rgba(245, 87, 108, 0.6);
+        }
+
+        .signup-button {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .signup-button:hover {
+            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.6);
+        }
+
+        .login-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .back-home {
+            margin-top: 2rem;
+        }
+
+        .back-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 600;
+            opacity: 0.8;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .back-link:hover {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-5px);
+        }
+
+        /* Comparison Section */
+        .comparison-section {
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            margin: 2rem;
+            border-radius: 24px;
+            border: 2px solid var(--glass-border);
+            padding: 2rem;
+        }
+
+        .comparison-container h3 {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .comparison-table {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .comparison-row {
+            display: contents;
+        }
+
+        .comparison-row > div {
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-secondary);
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .comparison-row.header > div {
+            background: var(--primary-gradient);
+            font-weight: 700;
+            color: white;
+        }
+
+        .feature-name {
+            text-align: left !important;
+            font-weight: 600;
+        }
+
+        .guest-col, .login-col {
+            font-size: 1.2rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .mode-cards {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .mode-card {
+                padding: 2rem;
+            }
+
+            .mode-selection-wrapper h2 {
+                font-size: 1.8rem;
+            }
+
+            .comparison-table {
+                grid-template-columns: 1.5fr 1fr 1fr;
+            }
+
+            .comparison-row > div {
+                padding: 0.75rem 0.5rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .test-mode-container {
+                padding: 20px 10px;
+            }
+
+            .mode-card {
+                padding: 1.5rem;
+            }
+
+            .mode-selection-wrapper h2 {
+                font-size: 1.5rem;
+            }
+
+            .mode-button {
+                padding: 14px 20px;
+                font-size: 1rem;
+            }
+
+            .comparison-section {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</body>
+</html>
